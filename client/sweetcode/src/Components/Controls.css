@@ -1,0 +1,61 @@
+.controls {
+    padding: 1rem;
+    border-top: 1px solid #ccc;
+}
+
+.top-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.testcase-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.tab-btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #eee;
+    cursor: pointer;
+    position: relative;
+}
+
+.tab-btn.active {
+    background-color: #ddd;
+    font-weight: bold;
+}
+
+.delete-btn {
+    margin-left: 6px;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.add-btn {
+    padding: 0.4rem;
+    font-size: 1.2rem;
+    border: none;
+    background-color: #eee;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.testcase-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    padding: 0.5rem;
+    font-family: monospace;
+}
