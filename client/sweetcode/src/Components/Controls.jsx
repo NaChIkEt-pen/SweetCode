@@ -67,9 +67,14 @@ function Controls({ language, setLanguage, handleRun, handleSubmit }) {
         <textarea
           value={testCases[activeIndex].input}
           onChange={(e) => updateTestCaseInput(e.target.value)}
+          className="custom-textarea"
         />
         <label>Output</label>
-        <textarea value={testCases[activeIndex].output} readOnly />
+        <textarea
+          value={testCases[activeIndex].output}
+          readOnly
+          className="custom-textarea"
+        />
       </div>
     </div>
   );

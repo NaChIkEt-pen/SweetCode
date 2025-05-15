@@ -43,7 +43,7 @@ function App() {
     <div className="app-container">
       <div className="left-panel">
         <QueryBox className="query-box" />
-        {question && <ProblemDescription />}
+        <ProblemDescription />
       </div>
       <div className="right-panel">
         <CodeEditor language={language} code={code} setCode={setCode} />
