@@ -1,16 +1,21 @@
 import React, { useState } from "react";
-
+import { useAtom } from "jotai";
+import { problemDescription } from "../atoms/global";
 function QueryBox() {
   const [query, setQuery] = useState("");
-  const [reframedQuestion, setReframedQuestion] = useState("");
+  const [reframedQuestion, setReframedQuestion] = useAtom(problemDescription);
+  const [alert, setAlert] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const updateQuery = (value) => {
+    // console.log(apiUrl);
     setQuery(value);
   };
   const searchQuery = async () => {
-    console.log("Searching for:", query);
+    // console.log("Searching for:", query);
     try {
       const payload = {
-        query: query,
+        question: query,
       };
       // console.log("Payload:", payload);
       const response = await fetch(`${apiUrl}/reframe`, {
@@ -21,10 +26,12 @@ function QueryBox() {
         body: JSON.stringify(payload),
       });
 
-      const result = await response.json();
+      let result = await response.text();
       // console.log("API Response:", result);
+      result = JSON.parse(result); // first parse, gets a string again
+      result = JSON.parse(result);
       if (response.ok) {
-        setReframedQuestion(result.reframedQuestion);
+        setReframedQuestion(result);
       } else {
         setAlert(result.message);
       }

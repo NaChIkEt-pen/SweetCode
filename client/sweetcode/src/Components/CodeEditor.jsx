@@ -16,10 +16,9 @@ function CodeEditor({ language, code, setCode }) {
         name="code-editor"
         editorProps={{ $blockScrolling: true }}
         width="100%"
-        height="400px"
+        height="390px"
       />
     </div>
   );
 }
 export default CodeEditor;
-

@@ -1,7 +1,10 @@
 import React from "react";
 import "./ProblemDescription.css";
-
+import { useAtom } from "jotai";
+import { problemDescription } from "../atoms/global";
 function ProblemDescription() {
+  const [descData] = useAtom(problemDescription);
+
   let Title = "Two Sum";
   let Description =
     "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.";
@@ -14,9 +17,12 @@ function ProblemDescription() {
   ];
   let I_P = "nums = [2,7,11,15], target = 9";
   let O_P = "[0,1]";
+  useEffect(() => {
+    console.log(descData.title);
+  }, [descData]);
   return (
     <div className="problem-description">
-      <h2>{Title}</h2>
+      <h2>{descData.title}</h2>
       <p>{Description}</p>
       <ul>{Constraints}</ul>
       <pre>
