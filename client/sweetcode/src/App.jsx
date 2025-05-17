@@ -11,7 +11,7 @@ function App() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [question, setQuestion] = useState(false);
-
+  const [selectedValue, setSelectedValue] = useState("Practice");
   // const handleRun = (codeInput) => {
   //   console.log("Run code with input:", codeInput);
   // };
@@ -29,7 +29,9 @@ function App() {
     // Example: Simulate output
     // Later replace with API call to code execution backend
   };
-
+  const handleRadioChange = (value) => {
+    setSelectedValue(value);
+  };
   const handleSubmit = () => {
     console.log("Submitting Code:\n", code);
     console.log("Language:", language);
@@ -46,16 +48,42 @@ function App() {
         <ProblemDescription />
       </div>
       <div className="right-panel">
-        <CodeEditor language={language} code={code} setCode={setCode} />
-        <Controls
+        <div className="radio-group">
+          <input
+            type="radio"
+            id="option1"
+            value="Solution"
+            checked={selectedValue === "Solution"}
+            onChange={() => handleRadioChange("Solution")}
+          />
+          <label htmlFor="option1">Solution</label>
+
+          <input
+            type="radio"
+            id="option2"
+            value="Practice"
+            checked={selectedValue === "Practice"}
+            onChange={() => handleRadioChange("Practice")}
+          />
+          <label htmlFor="option2">Practice</label>
+        </div>
+        <CodeEditor
           language={language}
-          setLanguage={setLanguage}
-          input={input}
-          setInput={setInput}
-          output={output}
-          handleRun={handleRun}
-          handleSubmit={handleSubmit}
+          code={code}
+          setCode={setCode}
+          selectedValue={selectedValue}
         />
+        {selectedValue == "Practice" && (
+          <Controls
+            language={language}
+            setLanguage={setLanguage}
+            input={input}
+            setInput={setInput}
+            output={output}
+            handleRun={handleRun}
+            handleSubmit={handleSubmit}
+          />
+        )}
       </div>
     </div>
   );

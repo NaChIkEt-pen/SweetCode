@@ -5,7 +5,11 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 
-function CodeEditor({ language, code, setCode }) {
+function CodeEditor({ language, code, setCode, selectedValue }) {
+  let readOnly = true;
+  if (selectedValue == "Practice") {
+    readOnly = false;
+  }
   return (
     <div className="code-editor">
       <AceEditor
@@ -17,6 +21,7 @@ function CodeEditor({ language, code, setCode }) {
         editorProps={{ $blockScrolling: true }}
         width="100%"
         height="390px"
+        readOnly={readOnly}
       />
     </div>
   );
