@@ -66,32 +66,70 @@ function QueryBox() {
       </button>
       <Popup open={isOpen} onClose={() => setIsOpen(false)} modal nested>
         {(close) => (
-          <div className="modal">
+          <div
+            className="modal"
+            style={{
+              maxHeight: "80vh",
+              overflowY: "auto",
+              padding: "20px",
+              background: "white",
+              borderRadius: "8px",
+              boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+            }}
+          >
             <button className="close" onClick={close}>
               &times;
             </button>
-            <div className="header">Reframed Question</div>
+            <h3 className="header">Reframed Question</h3>
             <div className="content">
-              <h3>{reframedQuestion?.title}</h3>
-              <p>{reframedQuestion?.description}</p>
-              <ul>
-                {(reframedQuestion?.constraints || []).map((item, idx) => (
-                  <li key={idx}>{item}</li>
-                ))}
-              </ul>
-              <pre>
-                <strong>Input:</strong> {reframedQuestion?.input}
-                {"\n"}
-                <strong>Output:</strong> {reframedQuestion?.output}
-              </pre>
+              <div className="problem-description">
+                <h2>{reframedQuestion?.title}</h2>
+
+                <strong>Description:</strong>
+                <p>{reframedQuestion?.description}</p>
+
+                <strong>Input:</strong>
+                <pre>{reframedQuestion?.input}</pre>
+
+                <strong>Output:</strong>
+                <pre>{reframedQuestion?.output}</pre>
+
+                {reframedQuestion?.example &&
+                  Array.isArray(reframedQuestion.example) && (
+                    <>
+                      <strong>Examples:</strong>
+                      <div className="example-section">
+                        {reframedQuestion.example.map((ex, idx) => (
+                          <div
+                            key={idx}
+                            className="example-item"
+                            style={{ marginBottom: "1rem" }}
+                          >
+                            <strong>Input:</strong>
+                            <pre>{ex.input}</pre>
+
+                            <strong>Output:</strong>
+                            <pre>{ex.output}</pre>
+
+                            <strong>Explanation:</strong>
+                            <pre>{ex.explanation}</pre>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                <strong>Constraints:</strong>
+                <ul>
+                  {(reframedQuestion?.constraints || []).map((item, idx) => (
+                    <li key={idx}>{item}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
+
             <div className="actions">
-              <button
-                className="button"
-                onClick={() => {
-                  setIsOpen(false);
-                }}
-              >
+              <button className="button" onClick={() => setIsOpen(false)}>
                 Close
               </button>
             </div>

@@ -12,5 +12,17 @@
 .problem-description pre {
     background: #f0f0f0;
     padding: 10px;
+    white-space: pre-wrap;
+    /* Allow wrapping */
+    word-wrap: break-word;
+    /* Break long words if needed */
     overflow-x: auto;
+    /* Optional: can be hidden if you want no horizontal scroll */
+}
+
+.example-item {
+    /* background: #e0ddddb0; */
+    margin-top: 5px;
+    border: 1.25px solid #ccc;
+    padding: 15px;
 }
