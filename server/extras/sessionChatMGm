@@ -1,0 +1,32 @@
+# class ReframeQuestion(Resource):
+#     def post(self):
+#         user_id = request.headers.get("X-User-ID")
+#         if not user_id:
+#             return {"error": "Missing user ID"}, 400
+
+#         data = request.get_json()
+#         question = data.get("question")
+#         if not question:
+#             return {"error": "Missing question"}, 400
+
+#         chat_key = f"chat_session:{user_id}"
+#         message_history = []
+
+#         if redis_client.exists(chat_key):
+#             message_history = json.loads(redis_client.get(chat_key))
+
+#         system_message = {"role": "user", "parts": [code_reframe_system_instruction + "\n" + question]}
+#         message_history.append(system_message)
+
+#         response = model.generate_content(message_history)
+#         message_history.append({"role": "model", "parts": [response.text]})
+
+#         redis_client.set(chat_key, json.dumps(message_history))
+
+#         res = response.text.strip()
+#         if res.startswith("```json"):
+#             res = res.lstrip("```json").strip()
+#         if res.endswith("```"):
+#             res = res.rstrip("```").strip()
+
+#         return res, 200

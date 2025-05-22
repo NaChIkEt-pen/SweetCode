@@ -5,6 +5,7 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 
 function QueryBox() {
+  const userId = getSessionId();
   const [query, setQuery] = useState("");
   const [reframedQuestion, setReframedQuestion] = useAtom(problemDescription);
   const [alert, setAlert] = useState("");
@@ -27,6 +28,7 @@ function QueryBox() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-User-ID": userId,
         },
         body: JSON.stringify(payload),
       });
