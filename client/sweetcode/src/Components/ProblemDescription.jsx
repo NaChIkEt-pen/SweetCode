@@ -7,7 +7,7 @@ function ProblemDescription() {
   const [descData] = useAtom(problemDescription);
 
   useEffect(() => {
-    console.log("descData changed:", descData);
+    // console.log("descData changed:", descData);
   }, [descData]);
 
   return (

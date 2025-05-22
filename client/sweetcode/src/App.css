@@ -41,3 +41,7 @@
   margin-right: 20px;
   /* Spacing between label and next button*/
 }
+
+.query-btn {
+  margin-right: 10px;
+}

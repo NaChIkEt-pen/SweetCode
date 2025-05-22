@@ -1,4 +1,4 @@
-export function getSessionId() {
+function getSessionId() {
   let id = localStorage.getItem("user_id");
   if (!id) {
     id = crypto.randomUUID(); // or use a library like uuid
@@ -6,3 +6,5 @@ export function getSessionId() {
   }
   return id;
 }
+
+export default getSessionId;

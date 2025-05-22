@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useAtom } from "jotai";
-import { problemDescription } from "../atoms/global";
+import { problemDescription, genCodeFlag } from "../atoms/global";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
+// import { getSession } from "../utils/session.js";
 
 function QueryBox() {
-  const userId = getSessionId();
+  // const userId = getSession();
   const [query, setQuery] = useState("");
   const [reframedQuestion, setReframedQuestion] = useAtom(problemDescription);
+  const [genCode, setGenCode] = useAtom(genCodeFlag);
   const [alert, setAlert] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -28,7 +30,7 @@ function QueryBox() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-User-ID": userId,
+          // "X-User-ID": userId,
         },
         body: JSON.stringify(payload),
       });
@@ -46,7 +48,7 @@ function QueryBox() {
             .filter(Boolean);
         }
 
-        console.log("Final parsed result:", result);
+        // console.log("Final parsed result:", result);
         setReframedQuestion({ ...result });
         // console.log("QueryBox atom:", problemDescription);
         setIsOpen(true);
@@ -58,13 +60,19 @@ function QueryBox() {
       setAlert("Error submitting form");
     }
   };
-
+  const setGenCodeFlag = async () => {
+    setGenCode(true);
+    // console.log(genCode);
+  };
   return (
     <div className="query-box">
       <h2>Sweet Code</h2>
       <textarea onChange={(e) => updateQuery(e.target.value)} />
       <button className="query-btn" onClick={searchQuery}>
         Ask the Question
+      </button>
+      <button className="query-btn" onClick={setGenCodeFlag}>
+        Generate Code
       </button>
       <Popup open={isOpen} onClose={() => setIsOpen(false)} modal nested>
         {(close) => (
