@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import ProblemDescription from "./Components/ProblemDescription";
-import CodeEditor from "./components/CodeEditor";
+import CodeEditor from "./Components/CodeEditor";
 import Controls from "./components/Controls";
 import QueryBox from "./Components/QueryBox";
 import "./App.css";
 
 function App() {
-  const [language, setLanguage] = useState("javascript");
+  const [language, setLanguage] = useState("");
   const [code, setCode] = useState("");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");

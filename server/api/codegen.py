@@ -19,7 +19,11 @@ class CodeGen(Resource):
         data = request.get_json()
 
         formatted_question = data.get("formatted_question")
-        full_prompt = code_gen_system_instruction + formatted_question
+        if not formatted_question:
+            return jsonify({"error": "No formatted question provided"}), 400
+        
+        # print("hello", formatted_question)
+        full_prompt = code_gen_system_instruction + str(formatted_question)
         response = model.generate_content(full_prompt)
         res = response.text
         if res.strip().startswith("```json"):

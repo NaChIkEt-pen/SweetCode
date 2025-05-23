@@ -1,7 +1,11 @@
 import { React, useEffect, useState } from "react";
 import AceEditor from "react-ace";
 import { useAtom } from "jotai";
-import { problemDescription, genCodeFlag } from "../atoms/global";
+import {
+  problemDescription,
+  generatedCode,
+  genCodeLangauge,
+} from "../atoms/global";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-java";
@@ -9,44 +13,44 @@ import "ace-builds/src-noconflict/theme-monokai";
 
 function CodeEditor({ language, code, setCode, selectedValue }) {
   const [reframedQuestion, setReframedQuestion] = useAtom(problemDescription);
-  const [genCode, setGenCode] = useAtom(genCodeFlag);
+  const [genCode, setGenCode] = useAtom(generatedCode);
   const [alert, setAlert] = useState("");
-
+  const [genCodeLang, setGenCodeLang] = useAtom(genCodeLangauge);
+  const [codeText, setCodeText] = useState("");
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  const generateCode = async () => {
-    console.log("Generating Code");
-    try {
-      const payload = {
-        formatted_question: reframedQuestion,
-      };
-      // console.log("Payload:", payload);
-      const response = await fetch(`${apiUrl}/codegen`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // "X-User-ID": userId,
-        },
-        body: JSON.stringify(payload),
-      });
+  // const generateCode = async () => {
+  //   console.log("Generating Code");
+  //   try {
+  //     const payload = {
+  //       formatted_question: reframedQuestion,
+  //     };
+  //     // console.log("Payload:", payload);
+  //     const response = await fetch(`${apiUrl}/codegen`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         // "X-User-ID": userId,
+  //       },
+  //       body: JSON.stringify(payload),
+  //     });
 
-      let result = await response.text();
+  //     let result = await response.text();
 
-      result = JSON.parse(result); // first parse, gets a string again
-      result = JSON.parse(result);
-      if (response.ok) {
-        console.log("API Response:", result);
-      } else {
-        setAlert(result.message);
-      }
-    } catch (error) {
-      console.error("Submission error", error);
-      setAlert("Error submitting form");
-    }
-  };
+  //     result = JSON.parse(result); // first parse, gets a string again
+  //     result = JSON.parse(result);
+  //     if (response.ok) {
+  //       console.log("API Response:", result);
+  //     } else {
+  //       setAlert(result.message);
+  //     }
+  //   } catch (error) {
+  //     console.error("Submission error", error);
+  //     setAlert("Error submitting form");
+  //   }
+  // };
   useEffect(() => {
-    // console.log(genCode);
-    if (genCode) generateCode();
+    console.log(codeText);
   }, [genCode]);
   let readOnly = true;
   if (selectedValue == "Practice") {

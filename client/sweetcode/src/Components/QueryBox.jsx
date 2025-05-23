@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useAtom } from "jotai";
-import { problemDescription, genCodeFlag } from "../atoms/global";
+import {
+  problemDescription,
+  genCodeFlag,
+  generatedCode,
+} from "../atoms/global";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 // import { getSession } from "../utils/session.js";
@@ -9,12 +13,43 @@ function QueryBox() {
   // const userId = getSession();
   const [query, setQuery] = useState("");
   const [reframedQuestion, setReframedQuestion] = useAtom(problemDescription);
-  const [genCode, setGenCode] = useAtom(genCodeFlag);
+  const [genCode, setGeneratedCode] = useAtom(generatedCode);
+
   const [alert, setAlert] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
+  const generateCode = async () => {
+    console.log("Generating Code");
+    try {
+      const payload = {
+        formatted_question: reframedQuestion,
+      };
+      // console.log("Payload:", payload);
+      const response = await fetch(`${apiUrl}/codegen`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // "X-User-ID": userId,
+        },
+        body: JSON.stringify(payload),
+      });
 
+      let result = await response.text();
+
+      result = JSON.parse(result); // first parse, gets a string again
+      result = JSON.parse(result);
+      if (response.ok) {
+        // console.log("API Response:", typeof result["cppcode"]);
+        setGeneratedCode(result);
+      } else {
+        setAlert(result.message);
+      }
+    } catch (error) {
+      console.error("Submission error", error);
+      setAlert("Error submitting form");
+    }
+  };
   const updateQuery = (value) => {
     // console.log(apiUrl);
     setQuery(value);
@@ -61,7 +96,8 @@ function QueryBox() {
     }
   };
   const setGenCodeFlag = async () => {
-    setGenCode(true);
+    // setGenCode(true);
+    // gen;
     // console.log(genCode);
   };
   return (
@@ -71,7 +107,7 @@ function QueryBox() {
       <button className="query-btn" onClick={searchQuery}>
         Ask the Question
       </button>
-      <button className="query-btn" onClick={setGenCodeFlag}>
+      <button className="query-btn" onClick={generateCode}>
         Generate Code
       </button>
       <Popup open={isOpen} onClose={() => setIsOpen(false)} modal nested>

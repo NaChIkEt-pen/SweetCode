@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import "./Controls.css";
+import { useAtom } from "jotai";
+import { genCodeLangauge } from "../atoms/global";
 
 function Controls({ language, setLanguage, handleRun, handleSubmit }) {
   const [testCases, setTestCases] = useState([{ input: "", output: "" }]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [genCodeLang, setGenCodeLang] = useAtom(genCodeLangauge);
 
   const updateTestCaseInput = (value) => {
     const newCases = [...testCases];
@@ -26,7 +29,10 @@ function Controls({ language, setLanguage, handleRun, handleSubmit }) {
   return (
     <div className="controls">
       <div className="top-controls">
-        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+        <select
+          value={language}
+          onChange={(e) => setGenCodeLang(e.target.value)}
+        >
           <option value="python">Python</option>
           <option value="C++">C++</option>
         </select>
