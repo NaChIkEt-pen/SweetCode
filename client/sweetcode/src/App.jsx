@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ProblemDescription from "./Components/ProblemDescription";
 import CodeEditor from "./Components/CodeEditor";
-import Controls from "./components/Controls";
+import Controls from "./Components/Controls";
 import QueryBox from "./Components/QueryBox";
 import "./App.css";
 
