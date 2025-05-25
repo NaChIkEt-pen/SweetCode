@@ -11,26 +11,61 @@ test_code_prompt = (
     "Just generate diverse and comprehensive test inputs suitable for algorithmic challenges."
 )
 
+# class TestCaseGen(Resource):
+#     def post(self):
+#         data = request.get_json()
+#         code = data.get("code")
+
+#         response = model.generate_content(test_code_prompt + code)
+#         res = response.text
+#         if res.strip().startswith("```python"):
+#             res = "\n".join(res.strip().splitlines()[1:])
+#         if res.strip().endswith("```"):
+#             res = "\n".join(res.strip().splitlines()[:-1])
+#         # print(res)
+#         exec_globals = {}
+#         exec(res, exec_globals)
+
+#         inputs = exec_globals.get("inputs", [])
+#         outputs = exec_globals.get("outputs", [])
+
+#         print("\n--- Generated Test Cases ---")
+#         for i, (inp, out) in enumerate(zip(inputs, outputs), 1):
+#             print(f"Test Case {i}:\n  Input: {inp}\n  Output: {out}\n")
+
+#         return res, 200
+
 class TestCaseGen(Resource):
     def post(self):
         data = request.get_json()
         code = data.get("code")
 
         response = model.generate_content(test_code_prompt + code)
-        res = response.text
-        if res.strip().startswith("```python"):
-            res = "\n".join(res.strip().splitlines()[1:])
-        if res.strip().endswith("```"):
-            res = "\n".join(res.strip().splitlines()[:-1])
-        # print(res)
+        res = response.text.strip()
+
+        # Remove ```python and ``` if present
+        if res.startswith("```python"):
+            res = "\n".join(res.splitlines()[1:])
+        if res.endswith("```"):
+            res = "\n".join(res.splitlines()[:-1])
+
+        # Execute the Python code to populate inputs and outputs
         exec_globals = {}
-        exec(res, exec_globals)
+        try:
+            exec(res, exec_globals)
+        except Exception as e:
+            return jsonify({"error": "Failed to execute generated code", "details": str(e)}), 500
 
         inputs = exec_globals.get("inputs", [])
         outputs = exec_globals.get("outputs", [])
 
+        # Print to server logs
         print("\n--- Generated Test Cases ---")
         for i, (inp, out) in enumerate(zip(inputs, outputs), 1):
             print(f"Test Case {i}:\n  Input: {inp}\n  Output: {out}\n")
 
-        return res, 200
+        # Return structured JSON
+        return jsonify({
+            "inputs": inputs,
+            "outputs": outputs
+        })

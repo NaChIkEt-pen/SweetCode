@@ -1,75 +1,86 @@
-import { React, useEffect, useState } from "react";
-import AceEditor from "react-ace";
+import { useEffect, useState, useRef } from "react";
+import Editor, { useMonaco } from "@monaco-editor/react";
 import { useAtom } from "jotai";
 import {
   problemDescription,
   generatedCode,
   genCodeLangauge,
 } from "../atoms/global";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/mode-python";
-import "ace-builds/src-noconflict/mode-java";
-import "ace-builds/src-noconflict/theme-monokai";
 
 function CodeEditor({ language, code, setCode, selectedValue }) {
-  const [reframedQuestion, setReframedQuestion] = useAtom(problemDescription);
-  const [genCode, setGenCode] = useAtom(generatedCode);
-  const [alert, setAlert] = useState("");
-  const [genCodeLang, setGenCodeLang] = useAtom(genCodeLangauge);
-  const [codeText, setCodeText] = useState("");
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const [reframedQuestion] = useAtom(problemDescription);
+  const [genCode] = useAtom(generatedCode);
+  const [genCodeLang] = useAtom(genCodeLangauge);
+  const editorRef = useRef(null);
+  const [readOnly, setReadOnly] = useState(true);
 
-  // const generateCode = async () => {
-  //   console.log("Generating Code");
-  //   try {
-  //     const payload = {
-  //       formatted_question: reframedQuestion,
-  //     };
-  //     // console.log("Payload:", payload);
-  //     const response = await fetch(`${apiUrl}/codegen`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         // "X-User-ID": userId,
-  //       },
-  //       body: JSON.stringify(payload),
-  //     });
+  const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
 
-  //     let result = await response.text();
+    // Bind Cmd/Ctrl + A (Select All)
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyA, () => {
+      editor.trigger("keyboard", "selectAll", null);
+    });
 
-  //     result = JSON.parse(result); // first parse, gets a string again
-  //     result = JSON.parse(result);
-  //     if (response.ok) {
-  //       console.log("API Response:", result);
-  //     } else {
-  //       setAlert(result.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Submission error", error);
-  //     setAlert("Error submitting form");
-  //   }
-  // };
+    // Bind Cmd/Ctrl + C (Copy)
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyC, () => {
+      document.execCommand("copy");
+    });
+
+    // Bind Cmd/Ctrl + V (Paste)
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyV, () => {
+      document.execCommand("paste");
+    });
+
+    // Bind Cmd/Ctrl + Z (Undo)
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyZ, () => {
+      editor.trigger("keyboard", "undo", null);
+    });
+
+    // Bind Cmd/Ctrl + Shift + Z (Redo)
+    editor.addCommand(
+      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyZ,
+      () => {
+        editor.trigger("keyboard", "redo", null);
+      }
+    );
+  };
+
+  // Toggle readonly based on selectedValue
   useEffect(() => {
-    console.log(codeText);
-  }, [genCode]);
-  let readOnly = true;
-  if (selectedValue == "Practice") {
-    readOnly = false;
-  }
+    if (selectedValue === "Practice") {
+      setReadOnly(false);
+    } else {
+      setReadOnly(true);
+    }
+  }, [selectedValue]);
+
+  // Update code when generatedCode changes
+  useEffect(() => {
+    const newCode = genCode["cppcode"];
+    if (newCode !== undefined) {
+      setCode(newCode);
+    }
+  }, [genCode, setCode]);
+
   return (
     <div className="code-editor">
-      <AceEditor
-        mode={language}
-        theme="monokai"
-        value={code}
-        onChange={(val) => setCode(val)}
-        name="code-editor"
-        editorProps={{ $blockScrolling: true }}
-        width="100%"
+      <Editor
         height="390px"
-        readOnly={readOnly}
+        language={language || "cpp"}
+        theme="vs-dark"
+        value={code}
+        onChange={(val) => setCode(val || "")}
+        onMount={handleEditorDidMount}
+        options={{
+          readOnly,
+          fontSize: 14,
+          minimap: { enabled: false },
+          scrollBeyondLastLine: false,
+        }}
       />
     </div>
   );
 }
+
 export default CodeEditor;

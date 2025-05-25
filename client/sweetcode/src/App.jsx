@@ -11,7 +11,7 @@ function App() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [question, setQuestion] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("Practice");
+  const [selectedValue, setSelectedValue] = useState("Solution");
   // const handleRun = (codeInput) => {
   //   console.log("Run code with input:", codeInput);
   // };

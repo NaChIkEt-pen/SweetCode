@@ -12,12 +12,13 @@ code_gen_system_instruction = (
     "Focus strictly on clarity, efficiency, and correctness under tight constraints typical of competitive programming."
     "the answer format should be a json with keys 'cppcode' & 'pythoncode'"
     "the code should contain the main function to take input and output in the required format. "
+    "in the code generated for the given question the input should not be hard coded as later same code will be used to generate different test cases, make sure to add ways to take proper input and proper output display"
 )
 
 class CodeGen(Resource):
     def post(self):
         data = request.get_json()
-
+        
         formatted_question = data.get("formatted_question")
         if not formatted_question:
             return jsonify({"error": "No formatted question provided"}), 400

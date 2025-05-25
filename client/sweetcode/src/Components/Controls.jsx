@@ -1,28 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "./Controls.css";
 import { useAtom } from "jotai";
-import { genCodeLangauge } from "../atoms/global";
+import {
+  genCodeLangauge,
+  testCaseInput,
+  testCaseOutput,
+} from "../atoms/global";
 
 function Controls({ language, setLanguage, handleRun, handleSubmit }) {
-  const [testCases, setTestCases] = useState([{ input: "", output: "" }]);
+  const [input, setInput] = useAtom(testCaseInput);
+  const [output, setOutput] = useAtom(testCaseOutput);
   const [activeIndex, setActiveIndex] = useState(0);
   const [genCodeLang, setGenCodeLang] = useAtom(genCodeLangauge);
 
+  const testCases = useMemo(() => {
+    if (!Array.isArray(input) || !Array.isArray(output))
+      return [{ input: "", output: "" }];
+    return input.map((inp, idx) => ({
+      input: inp || "",
+      output: output[idx] || "",
+    }));
+  }, [input, output]);
+
+  // Add fallback if no test cases exist
+  if (testCases.length === 0) {
+    testCases.push({ input: "", output: "" });
+  }
+
   const updateTestCaseInput = (value) => {
-    const newCases = [...testCases];
-    newCases[activeIndex].input = value;
-    setTestCases(newCases);
+    const newInput = [...safeInput];
+    newInput[activeIndex] = value;
+    setInput(newInput);
   };
 
   const addTestCase = () => {
-    setTestCases([...testCases, { input: "", output: "" }]);
+    setInput([...safeInput, ""]);
+    setOutput([...safeOutput, ""]);
     setActiveIndex(testCases.length);
   };
 
   const deleteTestCase = (index) => {
     if (testCases.length === 1) return;
-    const newCases = testCases.filter((_, i) => i !== index);
-    setTestCases(newCases);
+    const newInput = safeInput.filter((_, i) => i !== index);
+    const newOutput = safeOutput.filter((_, i) => i !== index);
+    setInput(newInput);
+    setOutput(newOutput);
     setActiveIndex(index > 0 ? index - 1 : 0);
   };
 

@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useAtom } from "jotai";
 import {
   problemDescription,
-  genCodeFlag,
   generatedCode,
+  testCaseInput,
+  testCaseOutput,
 } from "../atoms/global";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
@@ -14,13 +15,50 @@ function QueryBox() {
   const [query, setQuery] = useState("");
   const [reframedQuestion, setReframedQuestion] = useAtom(problemDescription);
   const [genCode, setGeneratedCode] = useAtom(generatedCode);
+  const [input, setInput] = useAtom(testCaseInput);
+  const [output, setOutput] = useAtom(testCaseOutput);
 
   const [alert, setAlert] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
+
+  const generateTestCases = async (code) => {
+    console.log("Generating test cases", code);
+    try {
+      const payload = {
+        code: code,
+      };
+      // console.log("Payload:", payload);
+      const response = await fetch(`${apiUrl}/testcasegen`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // "X-User-ID": userId,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      let result = await response.text();
+
+      // result = JSON.parse(result); // first parse, gets a string again
+      // result = JSON.parse(result);
+      if (response.ok) {
+        console.log("API Response:", result);
+        const ip = result.inputs;
+        const op = result.outputs;
+        setInput(ip);
+        setOutput(op);
+      } else {
+        setAlert(result.message);
+      }
+    } catch (error) {
+      console.error("Submission error", error);
+      setAlert("Error submitting form");
+    }
+  };
   const generateCode = async () => {
-    console.log("Generating Code");
+    console.log("Generating Code", reframedQuestion);
     try {
       const payload = {
         formatted_question: reframedQuestion,
@@ -40,8 +78,9 @@ function QueryBox() {
       result = JSON.parse(result); // first parse, gets a string again
       result = JSON.parse(result);
       if (response.ok) {
-        // console.log("API Response:", typeof result["cppcode"]);
+        // console.log("API Response:", result["cppcode"]);
         setGeneratedCode(result);
+        generateTestCases(result["cppcode"]);
       } else {
         setAlert(result.message);
       }
