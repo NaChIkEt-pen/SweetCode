@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import "./Controls.css";
 import { useAtom } from "jotai";
 import {
@@ -12,14 +12,20 @@ function Controls({ language, setLanguage, handleRun, handleSubmit }) {
   const [output, setOutput] = useAtom(testCaseOutput);
   const [activeIndex, setActiveIndex] = useState(0);
   const [genCodeLang, setGenCodeLang] = useAtom(genCodeLangauge);
+  const [testCases, setTestCases] = useState([{ input: "", output: "" }]);
+  const currentTestCase = testCases[activeIndex] || {
+    input: "",
+    output: "",
+    ex_output: "",
+  };
 
-  const testCases = useMemo(() => {
-    if (!Array.isArray(input) || !Array.isArray(output))
-      return [{ input: "", output: "" }];
-    return input.map((inp, idx) => ({
-      input: inp || "",
-      output: output[idx] || "",
+  useEffect(() => {
+    const newTestCases = input.map((inp, idx) => ({
+      input: inp,
+      output: "",
+      ex_output: output[idx] || "",
     }));
+    setTestCases(newTestCases);
   }, [input, output]);
 
   // Add fallback if no test cases exist
@@ -28,21 +34,23 @@ function Controls({ language, setLanguage, handleRun, handleSubmit }) {
   }
 
   const updateTestCaseInput = (value) => {
-    const newInput = [...safeInput];
+    const newInput = [...input];
     newInput[activeIndex] = value;
     setInput(newInput);
   };
 
   const addTestCase = () => {
-    setInput([...safeInput, ""]);
-    setOutput([...safeOutput, ""]);
-    setActiveIndex(testCases.length);
+    setInput((prev) => [...prev, ""]);
+    setOutput((prev) => [...prev, ""]);
+    setTimeout(() => {
+      setActiveIndex(testCases.length);
+    }, 0);
   };
 
   const deleteTestCase = (index) => {
     if (testCases.length === 1) return;
-    const newInput = safeInput.filter((_, i) => i !== index);
-    const newOutput = safeOutput.filter((_, i) => i !== index);
+    const newInput = input.filter((_, i) => i !== index);
+    const newOutput = output.filter((_, i) => i !== index);
     setInput(newInput);
     setOutput(newOutput);
     setActiveIndex(index > 0 ? index - 1 : 0);
@@ -93,13 +101,20 @@ function Controls({ language, setLanguage, handleRun, handleSubmit }) {
       <div className="testcase-area">
         <label>Input</label>
         <textarea
-          value={testCases[activeIndex].input}
+          value={currentTestCase.input}
           onChange={(e) => updateTestCaseInput(e.target.value)}
           className="custom-textarea"
         />
+
         <label>Output</label>
         <textarea
-          value={testCases[activeIndex].output}
+          value={currentTestCase.output}
+          readOnly
+          className="custom-textarea"
+        />
+        <label>Expected Output</label>
+        <textarea
+          value={currentTestCase.ex_output}
           readOnly
           className="custom-textarea"
         />

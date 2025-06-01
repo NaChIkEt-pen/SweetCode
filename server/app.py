@@ -34,9 +34,13 @@ def create_app():
     """Reframe API"""
     from api.reframe import ReframeQuestion
     api.add_resource(ReframeQuestion, "/reframe")
+    
     """I/O O/P Gen API"""
     from api.ipopgen import TestCaseGen
     api.add_resource(TestCaseGen, "/testcasegen")
 
+    """I/O O/P Gen API"""
+    from api.coderun import CodeRun
+    api.add_resource(CodeRun, "/coderun")
     app.client = app.test_client()  
     return app    

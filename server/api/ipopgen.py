@@ -60,9 +60,9 @@ class TestCaseGen(Resource):
         outputs = exec_globals.get("outputs", [])
 
         # Print to server logs
-        print("\n--- Generated Test Cases ---")
-        for i, (inp, out) in enumerate(zip(inputs, outputs), 1):
-            print(f"Test Case {i}:\n  Input: {inp}\n  Output: {out}\n")
+        # print("\n--- Generated Test Cases ---")
+        # for i, (inp, out) in enumerate(zip(inputs, outputs), 1):
+        #     print(f"Test Case {i}:\n  Input: {inp}\n  Output: {out}\n")
 
         # Return structured JSON
         return jsonify({

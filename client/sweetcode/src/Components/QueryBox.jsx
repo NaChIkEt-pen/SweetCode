@@ -41,12 +41,13 @@ function QueryBox() {
 
       let result = await response.text();
 
-      // result = JSON.parse(result); // first parse, gets a string again
+      result = JSON.parse(result); // first parse, gets a string again
       // result = JSON.parse(result);
       if (response.ok) {
-        console.log("API Response:", result);
+        // console.log("API Response:", result);
         const ip = result.inputs;
         const op = result.outputs;
+        // console.log("ip:", ip);
         setInput(ip);
         setOutput(op);
       } else {
