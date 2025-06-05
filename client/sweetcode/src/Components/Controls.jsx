@@ -5,20 +5,63 @@ import {
   genCodeLangauge,
   testCaseInput,
   testCaseOutput,
+  generatedCode,
 } from "../atoms/global";
 
-function Controls({ language, setLanguage, handleRun, handleSubmit }) {
+function Controls({ language, setLanguage, handleSubmit }) {
   const [input, setInput] = useAtom(testCaseInput);
   const [output, setOutput] = useAtom(testCaseOutput);
+  const [genCode] = useAtom(generatedCode);
   const [activeIndex, setActiveIndex] = useState(0);
   const [genCodeLang, setGenCodeLang] = useAtom(genCodeLangauge);
   const [testCases, setTestCases] = useState([{ input: "", output: "" }]);
+  const [alert, setAlert] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
   const currentTestCase = testCases[activeIndex] || {
     input: "",
     output: "",
     ex_output: "",
   };
+  const handleRun = async () => {
+    // console.log("Running Code:\n", genCode["cppcode"]);
+    // console.log("Language:", language);
+    // console.log("Input:\n", input);
+    try {
+      const payload = {
+        code: genCode["cppcode"],
+        language: language,
+        inputs: input,
+      };
+      // console.log("Payload:", payload);
+      const response = await fetch(`${apiUrl}/coderun`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // "X-User-ID": userId,
+        },
+        body: JSON.stringify(payload),
+      });
 
+      let result = await response.text();
+
+      result = JSON.parse(result); // first parse, gets a string again
+      // result = JSON.parse(result);
+      if (response.ok) {
+        console.log("API Response:", result);
+        // const ip = result.inputs;
+        // const op = result.outputs;
+        // // console.log("ip:", ip);
+        // setInput(ip);
+        // setOutput(op);
+      } else {
+        setAlert(result.message);
+      }
+    } catch (error) {
+      console.error("Submission error", error);
+      setAlert("Error submitting form");
+    }
+    // setOutput("Running...\n(Simulated output)");
+  };
   useEffect(() => {
     const newTestCases = input.map((inp, idx) => ({
       input: inp,
@@ -63,8 +106,8 @@ function Controls({ language, setLanguage, handleRun, handleSubmit }) {
           value={language}
           onChange={(e) => setGenCodeLang(e.target.value)}
         >
-          <option value="python">Python</option>
-          <option value="C++">C++</option>
+          {/* <option value="python">Python</option> */}
+          <option value="CPP">C++</option>
         </select>
         <button onClick={() => handleRun(testCases[activeIndex].input)}>
           Run

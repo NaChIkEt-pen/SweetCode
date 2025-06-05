@@ -6,7 +6,7 @@ import QueryBox from "./Components/QueryBox";
 import "./App.css";
 
 function App() {
-  const [language, setLanguage] = useState("");
+  const [language, setLanguage] = useState("CPP");
   const [code, setCode] = useState("");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");

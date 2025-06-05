@@ -24,7 +24,7 @@ function QueryBox() {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const generateTestCases = async (code) => {
-    console.log("Generating test cases", code);
+    // console.log("Generating test cases", code);
     try {
       const payload = {
         code: code,
@@ -59,7 +59,7 @@ function QueryBox() {
     }
   };
   const generateCode = async () => {
-    console.log("Generating Code", reframedQuestion);
+    // console.log("Generating Code", reframedQuestion);
     try {
       const payload = {
         formatted_question: reframedQuestion,
@@ -77,9 +77,10 @@ function QueryBox() {
       let result = await response.text();
 
       result = JSON.parse(result); // first parse, gets a string again
-      result = JSON.parse(result);
+      // result = JSON.parse(result);
+      // console.log(result);
       if (response.ok) {
-        // console.log("API Response:", result["cppcode"]);
+        // console.log("API Response:", result["cppcode"].toString());
         setGeneratedCode(result);
         generateTestCases(result["cppcode"]);
       } else {
