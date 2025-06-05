@@ -15,7 +15,9 @@ code_gen_system_instruction = (
     "in the code generated for the given question the input should not be hard coded as later same code will be used to generate different test cases, make sure to add ways to take proper input and proper output display"
     "the code should contain all the required imports"
 )
-
+code_formatting_prompt  = ("The following code JSON is malformed or incorrectly formatted:\n"
+        "Please fix the code and return ONLY a valid JSON object with keys 'cppcode' and 'pythoncode', "
+        "each containing properly formatted code as strings. Do NOT add any markdown or extra text.")
 class CodeGen(Resource):
     def post(self):
         data = request.get_json()
@@ -28,13 +30,17 @@ class CodeGen(Resource):
         full_prompt = code_gen_system_instruction + str(formatted_question)
         response = model.generate_content(full_prompt)
         res = response.text
+        # full_prompt = code_formatting_prompt + res
+        # response = model.generate_content(full_prompt)
+        # res = response.text
         if res.strip().startswith("```json"):
             res = "\n".join(res.strip().splitlines()[1:])
         if res.strip().endswith("```"):
             res = "\n".join(res.strip().splitlines()[:-1])
 
         data = json.loads(res)
+        # print(data)
         # print(str(data['cppcode']))
         # print(data['pythoncode'])
-        return res, 200
+        return data, 200
     

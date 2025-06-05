@@ -13,23 +13,25 @@ class CodeRun(Resource):
     def post(self):
         data = request.get_json()
         code = data.get("code")
+        input = data.get("inputs")
+        # print(input)
         # print(code)
 
         if not code:
             return jsonify({"error": "No code provided"}), 400
-        malformed_code_str = code
+        # malformed_code_str = code
 
-        full_prompt  = ("The following code JSON is malformed or incorrectly formatted:\n"
-        "Please fix the code and return ONLY a valid JSON object with keys 'cppcode' and 'pythoncode', "
-        "each containing properly formatted code as strings. Do NOT add any markdown or extra text.")
-        response = model.generate_content(full_prompt + code)
+        # full_prompt  = ("The following code JSON is malformed or incorrectly formatted:\n"
+        # "Please fix the code and return ONLY a valid JSON object with keys 'cppcode' and 'pythoncode', "
+        # "each containing properly formatted code as strings. Do NOT add any markdown or extra text.")
+        # response = model.generate_content(full_prompt + code)
         
-        res = response.text
-        if res.strip().startswith("```json"):
-            res = "\n".join(res.strip().splitlines()[1:])
-        if res.strip().endswith("```"):
-            res = "\n".join(res.strip().splitlines()[:-1])
-        data = json.loads(res)
+        # res = response.text
+        # if res.strip().startswith("```json"):
+        #     res = "\n".join(res.strip().splitlines()[1:])
+        # if res.strip().endswith("```"):
+        #     res = "\n".join(res.strip().splitlines()[:-1])
+        # data = json.loads(res)
         # print(data["cppcode"])
         
 
@@ -40,22 +42,26 @@ class CodeRun(Resource):
             "x-rapidapi-host": "onecompiler-apis.p.rapidapi.com",
             "x-rapidapi-key": key
         }
+        output = []
+        for inp in input:
+            payload = {
+                "language": "cpp",
+                "stdin": inp,
+                "files": [
+                    {
+                        "name": "main.cpp",
+                        # "content": data["cppcode"]
+                        "content": code
+                    }
+                ]
+            }
 
-        payload = {
-            "language": "cpp",
-            "stdin": "add 1000000000\nadd -1000000000\ngetRange",
-            "files": [
-                {
-                    "name": "main.cpp",
-                    "content": data["cppcode"]
-                }
-            ]
-        }
-
-        try:
-            response = requests.post(url, headers=headers, json=payload)
-            return jsonify(response.json())
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
-
-        return "ok"
+            try:
+                response = requests.post(url, headers=headers, json=payload)
+                # print(response.json())
+                output.append(response.json()["stdout"])                
+            except Exception as e:
+                return jsonify({"error": str(e)}), 500
+            
+        return jsonify(results = output)
+        # return "ok"
