@@ -147,7 +147,6 @@ SweetCode/
 - Google Gemini AI for powerful language processing
 - OneCompiler for reliable code execution
 - Monaco Editor for the excellent code editing experience
-- The competitive programming community for inspiration
 
 ---
 
