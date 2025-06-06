@@ -44,7 +44,7 @@ function QueryBox() {
       result = JSON.parse(result); // first parse, gets a string again
       // result = JSON.parse(result);
       if (response.ok) {
-        // console.log("API Response:", result);
+        console.log("API Response:", result);
         const ip = result.inputs;
         const op = result.outputs;
         // console.log("ip:", ip);
@@ -80,7 +80,7 @@ function QueryBox() {
       // result = JSON.parse(result);
       // console.log(result);
       if (response.ok) {
-        // console.log("API Response:", result["cppcode"].toString());
+        console.log("API Response:", result);
         setGeneratedCode(result);
         generateTestCases(result["cppcode"]);
       } else {

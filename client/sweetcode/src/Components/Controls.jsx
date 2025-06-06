@@ -125,7 +125,7 @@ function Controls({ language, setLanguage, handleSubmit }) {
             onClick={() => setActiveIndex(idx)}
           >
             Case {idx + 1}
-            <span
+            {/* <span
               className="delete-btn"
               onClick={(e) => {
                 e.stopPropagation();
@@ -133,7 +133,7 @@ function Controls({ language, setLanguage, handleSubmit }) {
               }}
             >
               ✕
-            </span>
+            </span> */}
           </button>
         ))}
         <button className="add-btn" onClick={addTestCase}>

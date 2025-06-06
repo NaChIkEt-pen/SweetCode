@@ -17,7 +17,7 @@ class CodeRun(Resource):
         language = data.get("language")
         print("input", input)
         print("code", repr(code))
-        print(language)
+        # print(language)
 
         if not code:
             return jsonify({"error": "No code provided"}), 400
@@ -60,14 +60,14 @@ class CodeRun(Resource):
             }
             
             try:
+                print("payload", payload)
                 response = requests.post(url, headers=headers, json=payload)
-                print(response.json())
-                # print(response.json()["stdout"].replace("\n", ""))
-                # stdout = response.json().get("stdout", "")
+                stdout = response.json().get("stdout", "")
+                # print(stdout)
                 # output.append(str(stdout))
-                # output.append(response.json()["stdout"])                
+                output.append(stdout)                
             except Exception as e:
                 return jsonify({"error": str(e)}), 500
             
-        # return jsonify(results = output)
+        return jsonify(results = output)
         return "ok"
