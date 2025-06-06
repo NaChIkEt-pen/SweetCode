@@ -5,17 +5,20 @@ import {
   genCodeLangauge,
   testCaseInput,
   testCaseOutput,
+  testCaseExpectedOutput,
   generatedCode,
 } from "../atoms/global";
 
 function Controls({ language, setLanguage, handleSubmit }) {
   const [input, setInput] = useAtom(testCaseInput);
   const [output, setOutput] = useAtom(testCaseOutput);
+  const [exOutput, setExOutput] = useAtom(testCaseExpectedOutput);
   const [genCode] = useAtom(generatedCode);
   const [activeIndex, setActiveIndex] = useState(0);
   const [genCodeLang, setGenCodeLang] = useAtom(genCodeLangauge);
   const [testCases, setTestCases] = useState([{ input: "", output: "" }]);
   const [alert, setAlert] = useState("");
+
   const apiUrl = import.meta.env.VITE_API_URL;
   const currentTestCase = testCases[activeIndex] || {
     input: "",
@@ -33,6 +36,7 @@ function Controls({ language, setLanguage, handleSubmit }) {
         inputs: input,
       };
       // console.log("Payload:", payload);
+      setAlert("Running Code...");
       const response = await fetch(`${apiUrl}/coderun`, {
         method: "POST",
         headers: {
@@ -48,11 +52,9 @@ function Controls({ language, setLanguage, handleSubmit }) {
       // result = JSON.parse(result);
       if (response.ok) {
         console.log("API Response:", result);
-        // const ip = result.inputs;
-        // const op = result.outputs;
-        // // console.log("ip:", ip);
-        // setInput(ip);
-        // setOutput(op);
+        const exop = result.results;
+        setExOutput(exop);
+        setAlert("Code Run Successfully");
       } else {
         setAlert(result.message);
       }
@@ -65,11 +67,11 @@ function Controls({ language, setLanguage, handleSubmit }) {
   useEffect(() => {
     const newTestCases = input.map((inp, idx) => ({
       input: inp,
-      output: "",
+      output: exOutput[idx] || "",
       ex_output: output[idx] || "",
     }));
     setTestCases(newTestCases);
-  }, [input, output]);
+  }, [input, output, exOutput]);
 
   // Add fallback if no test cases exist
   if (testCases.length === 0) {
@@ -112,9 +114,10 @@ function Controls({ language, setLanguage, handleSubmit }) {
         <button onClick={() => handleRun(testCases[activeIndex].input)}>
           Run
         </button>
-        <button onClick={() => handleSubmit(testCases[activeIndex].input)}>
+        {/* <button onClick={() => handleSubmit(testCases[activeIndex].input)}>
           Submit
-        </button>
+        </button> */}
+        {alert && alert}
       </div>
 
       <div className="testcase-tabs">
@@ -148,19 +151,26 @@ function Controls({ language, setLanguage, handleSubmit }) {
           onChange={(e) => updateTestCaseInput(e.target.value)}
           className="custom-textarea"
         />
-
-        <label>Output</label>
-        <textarea
-          value={currentTestCase.output}
-          readOnly
-          className="custom-textarea"
-        />
-        <label>Expected Output</label>
-        <textarea
-          value={currentTestCase.ex_output}
-          readOnly
-          className="custom-textarea"
-        />
+        <div className="outputs-div">
+          <div style={{ marginRight: "10px" }}>
+            <label>Output</label>
+            <br />
+            <textarea
+              value={currentTestCase.output}
+              readOnly
+              className="custom-textarea"
+            />
+          </div>
+          <div>
+            <label>Expected Output</label>
+            <br />
+            <textarea
+              value={currentTestCase.ex_output}
+              readOnly
+              className="custom-textarea"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

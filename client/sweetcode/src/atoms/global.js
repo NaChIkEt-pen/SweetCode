@@ -6,3 +6,4 @@ export const genCodeLangauge = atom("");
 export const genCodeFlag = atom(false);
 export const testCaseInput = atom([]);
 export const testCaseOutput = atom([]);
+export const testCaseExpectedOutput = atom([]);

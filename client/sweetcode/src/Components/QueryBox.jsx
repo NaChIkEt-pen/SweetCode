@@ -5,6 +5,7 @@ import {
   generatedCode,
   testCaseInput,
   testCaseOutput,
+  testCaseExpectedOutput,
 } from "../atoms/global";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
@@ -17,6 +18,7 @@ function QueryBox() {
   const [genCode, setGeneratedCode] = useAtom(generatedCode);
   const [input, setInput] = useAtom(testCaseInput);
   const [output, setOutput] = useAtom(testCaseOutput);
+  const [expectedOutput, setExpectedOutput] = useAtom(testCaseExpectedOutput);
 
   const [alert, setAlert] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -60,6 +62,9 @@ function QueryBox() {
   };
   const generateCode = async () => {
     // console.log("Generating Code", reframedQuestion);
+    setInput([]);
+    setOutput([]);
+    setExpectedOutput([]);
     try {
       const payload = {
         formatted_question: reframedQuestion,

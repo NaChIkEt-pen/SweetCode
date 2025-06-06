@@ -1,28 +1,30 @@
 .problem-description {
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 8px;
     padding: 15px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .problem-description h2 {
     margin-top: 0;
+    color: #111827;
 }
 
 .problem-description pre {
-    background: #f0f0f0;
+    background: #f9fafb;
     padding: 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.95rem;
     white-space: pre-wrap;
-    /* Allow wrapping */
     word-wrap: break-word;
-    /* Break long words if needed */
     overflow-x: auto;
-    /* Optional: can be hidden if you want no horizontal scroll */
 }
 
 .example-item {
-    /* background: #e0ddddb0; */
     margin-top: 5px;
-    border: 1.25px solid #ccc;
+    border: 1.25px solid #e5e7eb;
+    border-radius: 6px;
     padding: 15px;
+    background-color: #f9fafb;
 }

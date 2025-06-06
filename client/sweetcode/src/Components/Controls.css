@@ -1,6 +1,8 @@
 .controls {
     padding: 1rem;
     border-top: 1px solid #ccc;
+    background-color: #fff;
+    overflow: scroll;
 }
 
 .top-controls {
@@ -19,31 +21,48 @@
 .tab-btn {
     padding: 0.4rem 0.8rem;
     border-radius: 6px;
-    border: none;
-    background-color: #eee;
+    border: 1px solid #ddd;
+    background-color: #f2f2f2;
     cursor: pointer;
     position: relative;
+    transition: background-color 0.2s ease;
+}
+
+.tab-btn:hover {
+    background-color: #e0e7ff;
 }
 
 .tab-btn.active {
-    background-color: #ddd;
+    background-color: #d1d5ff;
     font-weight: bold;
+    border-color: #4F46E5;
+    color: #1e1e2f;
 }
 
 .delete-btn {
     margin-left: 6px;
-    color: red;
+    color: #e11d48;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.delete-btn:hover {
+    color: #9f1239;
 }
 
 .add-btn {
     padding: 0.4rem;
     font-size: 1.2rem;
     border: none;
-    background-color: #eee;
+    background-color: #e0e7ff;
     border-radius: 6px;
     cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.add-btn:hover {
+    background-color: #c7d2fe;
 }
 
 .testcase-area {
@@ -58,10 +77,18 @@ textarea {
     resize: vertical;
     padding: 0.5rem;
     font-family: monospace;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fcfcfc;
 }
 
 .custom-textarea {
-    width: 500px;
+    width: 250px;
     height: 50px;
     resize: none;
+}
+
+.outputs-div {
+    display: flex;
+    flex-direction: row;
 }

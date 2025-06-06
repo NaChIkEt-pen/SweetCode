@@ -15,25 +15,25 @@ class CodeRun(Resource):
         code = data.get("code")
         input = data.get("inputs")
         language = data.get("language")
-        print("input", input)
-        print("code", repr(code))
+        # print("input", input)
+        # print("code", repr(code))
         # print(language)
 
         if not code:
             return jsonify({"error": "No code provided"}), 400
-        malformed_code_str = code
+        # malformed_code_str = code
 
-        full_prompt  = ("The following code JSON is malformed or incorrectly formatted:\n"
-        "Please fix the code and return ONLY a valid JSON object with keys 'cppcode' and 'pythoncode', "
-        "each containing properly formatted code as strings. Do NOT add any markdown or extra text.")
-        response = model.generate_content(full_prompt + code)
+        # full_prompt  = ("The following code JSON is malformed or incorrectly formatted:\n"
+        # "Please fix the code and return ONLY a valid JSON object with keys 'cppcode' and 'pythoncode', "
+        # "each containing properly formatted code as strings. Do NOT add any markdown or extra text.")
+        # response = model.generate_content(full_prompt + code)
         
-        res = response.text
-        if res.strip().startswith("```json"):
-            res = "\n".join(res.strip().splitlines()[1:])
-        if res.strip().endswith("```"):
-            res = "\n".join(res.strip().splitlines()[:-1])
-        data = json.loads(res)
+        # res = response.text
+        # if res.strip().startswith("```json"):
+        #     res = "\n".join(res.strip().splitlines()[1:])
+        # if res.strip().endswith("```"):
+        #     res = "\n".join(res.strip().splitlines()[:-1])
+        # data = json.loads(res)
         # print(data["cppcode"])
         
 
@@ -60,7 +60,7 @@ class CodeRun(Resource):
             }
             
             try:
-                print("payload", payload)
+                # print("payload", payload)
                 response = requests.post(url, headers=headers, json=payload)
                 stdout = response.json().get("stdout", "")
                 # print(stdout)
