@@ -118,6 +118,19 @@ Before you begin, ensure you have the following installed:
 
 6. **Execute & Verify** - Run your code against multiple test scenarios to ensure correctness
 
+## 🏞️ User Interface Preview
+
+<table>
+  <tr>
+    <td><img src="https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/1.png?raw=true" width="300" /></td>
+    <td><img src="https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/2.png?raw=true" width="300" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/3.png?raw=true" width="300" /></td>
+    <td><img src="https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/4.png?raw=true" width="300" /></td>
+  </tr>
+</table>
+
 ## 🏗️ Project Structure
 
 ```
@@ -149,12 +162,5 @@ SweetCode/
 - Monaco Editor for the excellent code editing experience
 
 ---
-
-## 🏞️ User Interface Preview
-
-![Imgae 1](https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/1.png?raw=true)
-![Imgae 2](https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/2.png?raw=true)
-![Imgae 3](https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/3.png?raw=true)
-![Imgae 4](https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/4.png?raw=true)
 
 **Happy Coding! 🚀**
