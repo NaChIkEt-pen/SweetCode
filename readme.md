@@ -150,4 +150,11 @@ SweetCode/
 
 ---
 
+## 🏞️ User Interface Preview
+
+![Imgae 1](https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/1.png?raw=true)
+![Imgae 2](https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/2.png?raw=true)
+![Imgae 3](https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/3.png?raw=true)
+![Imgae 4](https://github.com/NaChIkEt-pen/SweetCode/blob/main/images/4.png?raw=true)
+
 **Happy Coding! 🚀**
